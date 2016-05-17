@@ -1,0 +1,29 @@
+{
+  "author": {
+    "name": "Ariel Filotti",
+    "email": "filotti@gmail.com",
+    "url": "http://www.quadminds.com"
+  },
+  "name": "galicia-parser",
+  "version": "1.0.3",
+  "dependencies": {
+    "datejs": "^1.0.0-rc3",
+    "form-data": "^1.0.0-rc4",
+    "request": "latest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/filotti/galicia-parser.git"
+  },
+  "keywords": [
+    "banco",
+    "galicia",
+    "exportar",
+    "csv",
+    "extracto",
+    "movimientos",
+    "office",
+    "ingresos",
+    "egresos"
+  ]
+}
