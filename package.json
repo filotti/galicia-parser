@@ -5,7 +5,7 @@
     "url": "http://www.quadminds.com"
   },
   "name": "galicia-parser",
-  "version": "1.0.3",
+  "version": "1.1.1",
   "dependencies": {
     "datejs": "^1.0.0-rc3",
     "form-data": "^1.0.0-rc4",
@@ -13,7 +13,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "http://github.com/filotti/galicia-parser.git"
+    "url": "git+ssh://git@github.com/filotti/galicia-parser.git"
   },
   "keywords": [
     "banco",
@@ -25,5 +25,15 @@
     "office",
     "ingresos",
     "egresos"
-  ]
+  ],
+  "readmeFilename": "README.md",
+  "description": "galicia-parser -- A node.js module to download a CSV file of your transactions from Galicia Office Banking",
+  "bugs": {
+    "url": "https://github.com/filotti/galicia-parser/issues"
+  },
+  "homepage": "https://github.com/filotti/galicia-parser#readme",
+  "_id": "galicia-parser@1.1.1",
+  "scripts": {},
+  "_shasum": "3e344580ae63d50d5b245aaa5955d72d6a12de4f",
+  "_from": "galicia-parser@latest"
 }

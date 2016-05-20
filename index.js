@@ -34,6 +34,8 @@ var lowBitMasks = new Array(0x0000, 0x0001, 0x0003, 0x0007, 0x000F, 0x001F,
     0x0FFF, 0x1FFF, 0x3FFF, 0x7FFF, 0xFFFF);
 var hexToChar = new Array('0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
     'a', 'b', 'c', 'd', 'e', 'f');
+var retries = 0;
+var maxRetries = 5;
 
 request = request.defaults({
     jar: true,
@@ -45,17 +47,21 @@ request = request.defaults({
 });
 
 module.exports = {
-    start: function (options) {
-        loginOfficeBanking(options);
+    start: function (options, callback) {
+        module.options = options;
+        module.callback = callback;
+        getCSVIntervalRef = setInterval(loginOfficeBanking, module.options.getCSVIntervalMinutes * 60 * 1000);
+        loginOfficeBanking();
     }
 }
 
-var loginOfficeBanking = function (options) {
+var loginOfficeBanking = function () {
+    lg("Logging in to Galicia Office Banking");
     request(baseUrl, function (error, response, body) {
         var formData = {
             __RequestVerificationToken: getRequestVerificationToken(body),
-            EncriptedPassword: getEncriptedPassword(body, options.password),
-            UserID: options.username,
+            EncriptedPassword: getEncriptedPassword(body, module.options.password),
+            UserID: module.options.username,
             Password: '',
             DevicePrintAdaptive: devicePrintAdaptive,
             isDebugEnabled: 'false'
@@ -70,27 +76,34 @@ var loginOfficeBanking = function (options) {
                 lg("Login step 2");
                 request(baseUrl + '/Balance/Concentradora2/0', function callBack(err, response, body) {
                     lg("Login step 3");
-                    getCSV(options);
-                    clearInterval(getCSVIntervalRef);
-                    getCSVIntervalRef = setInterval(getCSV, options.getCSVIntervalMinutes * 60 * 1000);
+                    getCSV();
                 });
             });
         });
     });
 }
 
-var getCSV = function (options) {
+var getCSV = function () {
     var ExportarExtractoCSVViejoOptions = {
         url: baseUrl + '/Balance/ExportarExtractoCSVViejo',
         body: "fechaDesde=&fechaHasta=&indiceCuenta=0&fechaDesde=&fechaHasta=&bifurcacionCA=False"
     };
     request.post(ExportarExtractoCSVViejoOptions, function callBack(err, response, body) {
-        if (body.indexOf("Fecha") !== 0) {
-            lg("Error getting CSV, retrying login");
-            loginOfficeBanking();
+        var error = null;
+	    lg(body);
+        if (body.indexOf("SALDO AL INICIO") === -1) {
+            if (retries < maxRetries) {
+                retries++;
+                lg("Error getting CSV, retrying login");
+                loginOfficeBanking();
+            } else {
+                error = "Couldn't get CSV after " + maxRetries + " retries";
+                module.callback(error, body);
+            }
         } else {
             lg("Got CSV");
-            processCSV(body, options);
+            retries = 0;
+            module.callback(error,body);
         }
     });
 }
@@ -112,22 +125,6 @@ var getEncriptedPassword = function (body, password) {
     var modulus = body2.substring(0, body2.indexOf('"'));
     var key = new RSAKeyPair("010001", "", modulus);
     return encryptedString(key, salt + '\\' + base64password);
-}
-
-var processCSV = function (body, options) {
-    var timestamp = new Date().toString('yyyy_MM_dd_HH_mm_ss');
-    var req = request.post(options.urlToSend, function (err, resp, body) {
-        if (err) {
-            lg('Error!');
-        } else {
-            lg(body);
-        }
-    });
-    var form = req.form();
-    form.append('file', body, {
-        filename: 'galicia_' + timestamp + '.txt',
-        contentType: 'text/plain'
-    });
 }
 
 var lg = function (message) {
