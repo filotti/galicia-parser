@@ -1,7 +1,7 @@
-galicia-parser -- A node.js module to download a CSV file of your transactions from Galicia Office Banking and post them to an URL of your choice
+galicia-parser -- A node.js module to download a CSV file of your transactions from Galicia Office Banking
 =================================================================================================================================================
 
-This node.js module will allow you to login to Galicia Office Banking and download them in CSV format, then post them to an URL of your choice.
+This node.js module will allow you to login to Galicia Office Banking and download them in CSV format, and then do whatever you want with it.
 
 ## HOW TO USE
 
