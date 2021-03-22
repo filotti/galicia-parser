@@ -40,7 +40,7 @@ var maxRetries = 5;
 request = request.defaults({
     jar: true,
     followAllRedirects: true,
-    ca: fs.readFileSync('./cacert.crt'),
+    ca: fs.readFileSync(path.resolve(__dirname, 'cacert.crt')),
     headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/50.0.2661.94 Safari/537.36',
         'Content-Type': 'application/x-www-form-urlencoded'
