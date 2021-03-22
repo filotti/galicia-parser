@@ -1,6 +1,8 @@
 var fs = require('fs');
 var path = require('path');
 var querystring = require('querystring');
+var sslRootCAs = require('ssl-root-cas/latest')
+sslRootCAs.inject();
 var request = require('request');
 require('datejs');
 
