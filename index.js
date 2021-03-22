@@ -90,7 +90,8 @@ var loginOfficeBanking = function () {
 var getCSV = function () {
     var ExportarExtractoCSVViejoOptions = {
         url: baseUrl + '/Balance/ExportarExtractoCSVViejo',
-        body: "fechaDesde=&fechaHasta=&indiceCuenta=0&fechaDesde=&fechaHasta=&bifurcacionCA=False"
+        body: "fechaDesde=&fechaHasta=&indiceCuenta=0&fechaDesde=&fechaHasta=&bifurcacionCA=False",
+        encoding: "binary"
     };
     request.post(ExportarExtractoCSVViejoOptions, function callBack(err, response, body) {
         var error = null;
